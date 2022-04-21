@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxtask/quest_controller.dart';
+import 'package:getxtask/resource/buttons.dart';
 import 'package:getxtask/resource/test.dart';
 
 class QuestContainer extends GetView<QuestController> {
@@ -168,13 +169,114 @@ class OptionBtn extends GetView<QuestController> {
     var size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        // Get.snackbar('my answer', option);
-
         controller.setuserAnswer(question, option);
         controller.increaseIndex();
         controller.nextQuest(controller.questionCount);
-        if (controller.questionCount == 3) {
+        if (controller.questionCount == quest.length - 1) {
           print(controller.answer);
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => Column(
+                    children: [
+                      Center(
+                        child: Container(
+                          height: 160.0,
+                          width: 270,
+                          margin: EdgeInsets.only(top: size.height * 0.3),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              SizedBox(
+                                  height: 50,
+                                  // width: 70,
+                                  child: Text(
+                                    ' Well Done For Participation in our Questionnaire',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.green[900], fontSize: 17),
+                                  )),
+                              const SizedBox(height: 30),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  EvCustomBtn(
+                                    ontap: () {
+                                      Get.back();
+                                    },
+                                    btnWidth: 80,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ));
+          // showModal(
+          //     configuration: const FadeScaleTransitionConfiguration(
+          //       transitionDuration: Duration(milliseconds: 500),
+          //     ),
+          //     context: context,
+          //     builder: (_) {
+          //       return AlertDialog(
+          //           backgroundColor: Theme.of(context).backgroundColor,
+          //           shape: RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.circular(15)),
+          //           title: const Center(child: Text('')),
+          //           content: SizedBox(
+          //             height: 110.0,
+          //             width: 110,
+          //             child: Column(
+          //               children: [
+          //                 SizedBox(
+          //                     height: 60,
+          //                     // width: 70,
+          //                     child: Text(
+          //                       ' Well Done For Participation in our Questionnaire',
+          //                       style: TextStyle(
+          //                           color: Theme.of(context).primaryColor),
+          //                     )),
+          //                 const SizedBox(height: 10),
+          //                 Row(
+          //                   mainAxisAlignment: MainAxisAlignment.center,
+          //                   children: [
+          //                     EvCustomBtn(
+          //                       ontap: () {
+          //                         Get.back();
+          //                       },
+          //                       btnWidth: 80,
+          //                     ),
+          //                   ],
+          //                 )
+          //               ],
+          //             ),
+          //           ));
+          //     });
+
+          // Get.bottomSheet(
+          //   Container(
+          //     height: size.height * 0.73,
+          //     decoration: BoxDecoration(
+          //       color: Theme.of(context).backgroundColor,
+          //       borderRadius: const BorderRadius.only(
+          //         topLeft: Radius.circular(8),
+          //         topRight: Radius.circular(8),
+          //       ),
+          //     ),
+          //     child: Column(
+          //       children: [
+          //         customRichTextTile(
+          //             title: 'h', subtitle: '${controller.answer}')
+          //       ],
+          //     ),
+          //   ),
+          // );
         }
       },
       child: Container(
@@ -198,3 +300,64 @@ class OptionBtn extends GetView<QuestController> {
     );
   }
 }
+// showMaterialModalBottomSheet(
+// backgroundColor: Colors.transparent,
+// context: context,
+// builder: (BuildContext context) => EvContainer(
+// height: size(context).height * 0.73,
+// color: Theme.of(context).backgroundColor,
+// borderRadius: const BorderRadius.only(
+// topLeft: Radius.circular(8),
+// topRight: Radius.circular(8),
+// ),
+// child: Padding(
+// padding: const EdgeInsets.symmetric(horizontal: 10),
+// child: SingleChildScrollView(
+// physics: const BouncingScrollPhysics(),
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.start,
+// children: [
+// const VSpace(30),
+// Center(
+// child: Text(
+// 'Transaction Detail',
+// style: TextStyles.h6,
+// ),
+// ),
+// const VSpace(30),
+// customRichTextTile(
+// title: 'Transaction Type ', subtitle: title),
+// const VSpace(20),
+// customRichTextTile(title: 'Amount', subtitle: amount),
+// const VSpace(20),
+// customRichTextTile(
+// title: 'Transaction Date', subtitle: createdDate),
+// const VSpace(20),
+// customRichTextTile(
+// title: 'Ref Code ', subtitle: refrenceCode),
+// const VSpace(20),
+// Text(
+// 'Description:',
+// style: TextStyles.body1.copyWith(
+// color: Colors.black,
+// fontSize: 14,
+// fontWeight: FontWeight.w500),
+// ),
+// Html(
+// data: subtitle,
+// style: {
+// 'body': Style(
+// padding: EdgeInsets.zero,
+// fontWeight: FontWeight.w600,
+// color: Colors.blue,
+// fontSize: FontSize.large,
+// )
+// },
+// )
+// // getPartHTML(subtitle, overflowEllipsis: false),
+// ],
+// ),
+// ),
+// ),
+// ),
+// );

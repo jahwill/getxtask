@@ -67,5 +67,5 @@ class QuestController extends GetxController {
   get questions => _question;
   get questionCount => count.value;
   get curentIndex => _currentIndex;
-  get answer => _userAnswer;
+  RxMap get answer => _userAnswer;
 }
