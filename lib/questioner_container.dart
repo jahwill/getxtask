@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxtask/quest_controller.dart';
-import 'package:getxtask/resource/buttons.dart';
+import 'package:getxtask/resource/const.dart';
 import 'package:getxtask/resource/test.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class QuestContainer extends GetView<QuestController> {
   const QuestContainer({Key? key}) : super(key: key);
@@ -23,8 +24,8 @@ class QuestContainer extends GetView<QuestController> {
               children: [
                 InkWell(
                   onTap: () {
-                    controller.decreaseIndex();
-                    controller.prvQuest(controller.questionCount);
+                    controller.previousQuestion();
+                    // controller.prvQuest(controller.questionCount);
 
                     // print(controller.answer);
                   },
@@ -43,8 +44,8 @@ class QuestContainer extends GetView<QuestController> {
                 ),
                 InkWell(
                   onTap: () {
-                    controller.increaseIndex();
-                    controller.nextQuest(controller.questionCount);
+                    controller.nextQuestion();
+                    // controller.nextQuest(controller.questionCount);
                     // Get.snackbar('title', 'forward', colorText: Colors.black);
                   },
                   child: Container(
@@ -68,6 +69,7 @@ class QuestContainer extends GetView<QuestController> {
             Obx(
               () => Container(
                 height: 20,
+                width: size.width * 0.65,
                 decoration: BoxDecoration(
                     color: Colors.grey, borderRadius: BorderRadius.circular(8)),
                 child: Row(
@@ -75,10 +77,14 @@ class QuestContainer extends GetView<QuestController> {
                   children: List.generate(
                       quest.length,
                       (index) => Container(
-                            width: 100,
-                            color: controller.questionCount + 1 > index
-                                ? Colors.yellow
-                                : Colors.blueGrey[100],
+                            width: (size.width * 0.6 / quest.length) - 5,
+                            decoration: BoxDecoration(
+                              color: controller.questionCount + 1 > index
+                                  ? Colors.yellow
+                                  : Colors.blueGrey[100],
+                            ),
+                            constraints: const BoxConstraints(
+                                minWidth: 20, maxWidth: 100),
                           )),
                 ),
               ),
@@ -88,8 +94,8 @@ class QuestContainer extends GetView<QuestController> {
             ),
             Obx(
               () => Text(
-                'Question ${controller.questionCount + 1}/3',
-                style: TextStyle(
+                'Question ${controller.questionCount + 1}/${quest.length}',
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 30,
                     fontWeight: FontWeight.w700),
@@ -121,7 +127,7 @@ class QuestContainer extends GetView<QuestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        controller.questions.value.toString(),
+                        controller.q1Question.value.toString(),
                         style: TextStyle(
                             color: Colors.grey[700],
                             fontSize: 20,
@@ -134,12 +140,12 @@ class QuestContainer extends GetView<QuestController> {
                         child: Column(
                             // children: [OptionBtn(size: size, option: 'kd')],
                             children: List.generate(
-                                controller.options.length,
+                                controller.qn1Options.length,
                                 (index) => OptionBtn(
-                                    currentIndex: controller.questionCount + 1,
+                                    currentIndex: controller.questionCount,
                                     question:
-                                        controller.questions.value.toString(),
-                                    option: controller.options[index]))),
+                                        controller.q1Question.value.toString(),
+                                    option: controller.qn1Options[index]))),
                       )
                     ],
                   ),
@@ -154,131 +160,79 @@ class QuestContainer extends GetView<QuestController> {
 }
 
 class OptionBtn extends GetView<QuestController> {
-  const OptionBtn({
-    Key? key,
-    this.option = '',
-    this.question = '',
-    this.currentIndex,
-  }) : super(key: key);
+  const OptionBtn(
+      {Key? key,
+      this.option = '',
+      this.question = '',
+      this.currentIndex,
+      this.onTap})
+      : super(key: key);
 
   final int? currentIndex;
   final String option;
   final String question;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return GestureDetector(
-      onTap: () {
-        controller.setuserAnswer(question, option);
-        controller.increaseIndex();
-        controller.nextQuest(controller.questionCount);
-        if (controller.questionCount == quest.length - 1) {
-          print(controller.answer);
-          showDialog(
-              context: context,
-              builder: (BuildContext context) => Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          height: 160.0,
-                          width: 270,
-                          margin: EdgeInsets.only(top: size.height * 0.3),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              SizedBox(
-                                  height: 50,
-                                  // width: 70,
-                                  child: Text(
-                                    ' Well Done For Participation in our Questionnaire',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.green[900], fontSize: 17),
-                                  )),
-                              const SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  EvCustomBtn(
-                                    ontap: () {
-                                      Get.back();
-                                    },
-                                    btnWidth: 80,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ));
-          // showModal(
-          //     configuration: const FadeScaleTransitionConfiguration(
-          //       transitionDuration: Duration(milliseconds: 500),
-          //     ),
-          //     context: context,
-          //     builder: (_) {
-          //       return AlertDialog(
-          //           backgroundColor: Theme.of(context).backgroundColor,
-          //           shape: RoundedRectangleBorder(
-          //               borderRadius: BorderRadius.circular(15)),
-          //           title: const Center(child: Text('')),
-          //           content: SizedBox(
-          //             height: 110.0,
-          //             width: 110,
-          //             child: Column(
-          //               children: [
-          //                 SizedBox(
-          //                     height: 60,
-          //                     // width: 70,
-          //                     child: Text(
-          //                       ' Well Done For Participation in our Questionnaire',
-          //                       style: TextStyle(
-          //                           color: Theme.of(context).primaryColor),
-          //                     )),
-          //                 const SizedBox(height: 10),
-          //                 Row(
-          //                   mainAxisAlignment: MainAxisAlignment.center,
-          //                   children: [
-          //                     EvCustomBtn(
-          //                       ontap: () {
-          //                         Get.back();
-          //                       },
-          //                       btnWidth: 80,
-          //                     ),
-          //                   ],
-          //                 )
-          //               ],
-          //             ),
-          //           ));
-          //     });
+      onTap: onTap ??
+          () {
+            controller.setuserAnswer(question, option);
+            controller.selected_Q1_Option.value = option; //set selecte option
+            controller.selected_Q2_Option.value = option; //set selecte option
+            ///call the next line method first before moving to the next base question
+            checkQuestionTwoTrigger(currentIndex!, context);
+            controller.nextQuestion();
 
-          // Get.bottomSheet(
-          //   Container(
-          //     height: size.height * 0.73,
-          //     decoration: BoxDecoration(
-          //       color: Theme.of(context).backgroundColor,
-          //       borderRadius: const BorderRadius.only(
-          //         topLeft: Radius.circular(8),
-          //         topRight: Radius.circular(8),
-          //       ),
-          //     ),
-          //     child: Column(
-          //       children: [
-          //         customRichTextTile(
-          //             title: 'h', subtitle: '${controller.answer}')
-          //       ],
-          //     ),
-          //   ),
-          // );
-        }
-      },
+            if (controller.curentIndex == quest.length - 1) {
+              print(controller.answer);
+              // showDialog(
+              //     context: context,
+              //     builder: (BuildContext context) => Column(
+              //           children: [
+              //             Center(
+              //               child: Container(
+              //                 height: 160.0,
+              //                 width: 270,
+              //                 margin: EdgeInsets.only(top: size.height * 0.3),
+              //                 decoration: BoxDecoration(
+              //                     color: Colors.white,
+              //                     borderRadius: BorderRadius.circular(5)),
+              //                 child: Column(
+              //                   children: [
+              //                     const SizedBox(
+              //                       height: 15,
+              //                     ),
+              //                     SizedBox(
+              //                         height: 50,
+              //                         // width: 70,
+              //                         child: Text(
+              //                           ' Well Done For Participation in our Questionnaire',
+              //                           textAlign: TextAlign.center,
+              //                           style: TextStyle(
+              //                               color: Colors.green[900], fontSize: 17),
+              //                         )),
+              //                     const SizedBox(height: 30),
+              //                     Row(
+              //                       mainAxisAlignment: MainAxisAlignment.center,
+              //                       children: [
+              //                         EvCustomBtn(
+              //                           ontap: () {
+              //                             Get.back();
+              //                           },
+              //                           btnWidth: 80,
+              //                         ),
+              //                       ],
+              //                     )
+              //                   ],
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ));
+            }
+          },
       child: Container(
         height: 60,
         width: size.width * 0.77,
@@ -299,65 +253,70 @@ class OptionBtn extends GetView<QuestController> {
       ),
     );
   }
+
+  checkQuestionTwoTrigger(int index, context) {
+    print(index);
+    if (quest[index]["q1_trigger"] == controller.selected_Q1_Option.value) {
+      showMaterialModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          builder: (BuildContext context) => Container(
+                // height: 680,
+                width: size(context).width * 0.87,
+                constraints: const BoxConstraints(maxWidth: 400),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: const Offset(0, 0),
+                          color: Colors.blueGrey.withOpacity(0.15),
+                          spreadRadius: 5,
+                          blurRadius: 10)
+                    ],
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(5))),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          controller.q2Question.value.toString(),
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                            // children: [OptionBtn(size: size, option: 'kd')],
+                            children: List.generate(
+                                controller.qn2Options.length,
+                                (i) => OptionBtn(
+                                    onTap: () {
+                                      Get.back();
+                                      controller.setuserAnswer(
+                                          question, option);
+                                      if (currentIndex! < quest.length) {
+                                        controller.nextQuestion();
+                                      } else {
+                                        null;
+                                      }
+                                    },
+                                    currentIndex: controller.questionCount + 1,
+                                    question:
+                                        controller.q1Question.value.toString(),
+                                    option: controller.qn2Options[i])))
+                      ],
+                    ),
+                  ),
+                ),
+              ));
+    }
+  }
 }
-// showMaterialModalBottomSheet(
-// backgroundColor: Colors.transparent,
-// context: context,
-// builder: (BuildContext context) => EvContainer(
-// height: size(context).height * 0.73,
-// color: Theme.of(context).backgroundColor,
-// borderRadius: const BorderRadius.only(
-// topLeft: Radius.circular(8),
-// topRight: Radius.circular(8),
-// ),
-// child: Padding(
-// padding: const EdgeInsets.symmetric(horizontal: 10),
-// child: SingleChildScrollView(
-// physics: const BouncingScrollPhysics(),
-// child: Column(
-// crossAxisAlignment: CrossAxisAlignment.start,
-// children: [
-// const VSpace(30),
-// Center(
-// child: Text(
-// 'Transaction Detail',
-// style: TextStyles.h6,
-// ),
-// ),
-// const VSpace(30),
-// customRichTextTile(
-// title: 'Transaction Type ', subtitle: title),
-// const VSpace(20),
-// customRichTextTile(title: 'Amount', subtitle: amount),
-// const VSpace(20),
-// customRichTextTile(
-// title: 'Transaction Date', subtitle: createdDate),
-// const VSpace(20),
-// customRichTextTile(
-// title: 'Ref Code ', subtitle: refrenceCode),
-// const VSpace(20),
-// Text(
-// 'Description:',
-// style: TextStyles.body1.copyWith(
-// color: Colors.black,
-// fontSize: 14,
-// fontWeight: FontWeight.w500),
-// ),
-// Html(
-// data: subtitle,
-// style: {
-// 'body': Style(
-// padding: EdgeInsets.zero,
-// fontWeight: FontWeight.w600,
-// color: Colors.blue,
-// fontSize: FontSize.large,
-// )
-// },
-// )
-// // getPartHTML(subtitle, overflowEllipsis: false),
-// ],
-// ),
-// ),
-// ),
-// ),
-// );
