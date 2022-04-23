@@ -2,10 +2,6 @@ import 'package:get/get.dart';
 import 'package:getxtask/resource/test.dart';
 
 class QuestController extends GetxController {
-  // List _list_Model_Questions =
-  //     quest.map((e) => QnModel.FromJson(e)).toList().obs;
-  //
-
   var _q1Question = quest[0]['q1'].toString().obs;
   var _q2Question = ''.obs;
 
@@ -43,27 +39,6 @@ class QuestController extends GetxController {
     _userAnswer[key] = value;
     // _selected_Q1_Option = value;
   }
-
-  // checkQuestionTwoTrigger(index) {
-  //   if (quest[index]['q1_options']['q1_trigger'] == _selected_Q1_Option) {
-  //
-  //
-  //
-  //   }
-  // }
-
-  // nextQuest(indx) {
-  //   setquestIndex = indx;
-  //   setOptionIndex = indx;
-  //   // increaseIndex();
-  //   setCurrentIndex = indx;
-  // }
-  //
-  // prvQuest(indx) {
-  //   setquestIndex = indx;
-  //   setOptionIndex = indx;
-  //   // increaseIndex();
-  // }
 
   previousQuestion() {
     if (count.value > 0 && count.value <= quest.length) {
@@ -103,3 +78,27 @@ class QuestController extends GetxController {
   RxMap get answer => _userAnswer;
   // get list_model_question => _list_Model_Questions;
 }
+// checkQuestionTwoTrigger(index) {
+//   if (quest[index]['q1_options']['q1_trigger'] == _selected_Q1_Option) {
+//
+//
+//
+//   }
+// }
+
+// nextQuest(indx) {
+//   setquestIndex = indx;
+//   setOptionIndex = indx;
+//   // increaseIndex();
+//   setCurrentIndex = indx;
+// }
+//
+// prvQuest(indx) {
+//   setquestIndex = indx;
+//   setOptionIndex = indx;
+//   // increaseIndex();
+// }
+
+// List _list_Model_Questions =
+//     quest.map((e) => QnModel.FromJson(e)).toList().obs;
+//

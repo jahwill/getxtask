@@ -184,54 +184,6 @@ class OptionBtn extends GetView<QuestController> {
             ///call the next line method first before moving to the next base question
             checkQuestionTwoTrigger(currentIndex!, context);
             controller.nextQuestion();
-
-            if (controller.curentIndex == quest.length - 1) {
-              print(controller.answer);
-              // showDialog(
-              //     context: context,
-              //     builder: (BuildContext context) => Column(
-              //           children: [
-              //             Center(
-              //               child: Container(
-              //                 height: 160.0,
-              //                 width: 270,
-              //                 margin: EdgeInsets.only(top: size.height * 0.3),
-              //                 decoration: BoxDecoration(
-              //                     color: Colors.white,
-              //                     borderRadius: BorderRadius.circular(5)),
-              //                 child: Column(
-              //                   children: [
-              //                     const SizedBox(
-              //                       height: 15,
-              //                     ),
-              //                     SizedBox(
-              //                         height: 50,
-              //                         // width: 70,
-              //                         child: Text(
-              //                           ' Well Done For Participation in our Questionnaire',
-              //                           textAlign: TextAlign.center,
-              //                           style: TextStyle(
-              //                               color: Colors.green[900], fontSize: 17),
-              //                         )),
-              //                     const SizedBox(height: 30),
-              //                     Row(
-              //                       mainAxisAlignment: MainAxisAlignment.center,
-              //                       children: [
-              //                         EvCustomBtn(
-              //                           ontap: () {
-              //                             Get.back();
-              //                           },
-              //                           btnWidth: 80,
-              //                         ),
-              //                       ],
-              //                     )
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ));
-            }
           },
       child: Container(
         height: 60,
