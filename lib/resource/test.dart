@@ -52,5 +52,5 @@ List<Map<String, dynamic>> questions_list = [
       "Judaism",
       "African Traditional Religion"
     ],
-  }
+  },
 ];

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxtask/quest_controller.dart';
-import 'package:getxtask/resource/const.dart';
 import 'package:getxtask/resource/test.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -178,12 +177,19 @@ class OptionBtn extends GetView<QuestController> {
     var size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: onTap ??
-          () {
+          () async {
             controller.setuserAnswer(question, option);
             controller.selected_Q1_Option.value = option; //set selecte option
             controller.selected_Q2_Option.value = option; //set selecte option
             ///call the next line method first before moving to the next base question
-            checkQuestionTwoTrigger(currentIndex!, context);
+            // await checkQuestionTwoTrigger(currentIndex!, context);
+            if (questions_list[currentIndex!]["q1_trigger"] ==
+                controller.selected_Q1_Option.value) {
+              await buildShowMaterialModalBottomSheet(context, size);
+            }
+            {
+              null;
+            }
             controller.nextQuestion();
           },
       child: Container(
@@ -207,71 +213,133 @@ class OptionBtn extends GetView<QuestController> {
     );
   }
 
-  checkQuestionTwoTrigger(int index, context) {
-    print(index);
-    if (questions_list[index]["q1_trigger"] ==
-        controller.selected_Q1_Option.value) {
-      showMaterialModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.transparent,
-          builder: (BuildContext context) => Container(
-                // height: 680,
-                width: size(context).width * 0.87,
-                constraints: const BoxConstraints(maxWidth: 400),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          offset: const Offset(0, 0),
-                          color: Colors.blueGrey.withOpacity(0.15),
-                          spreadRadius: 5,
-                          blurRadius: 10)
+  Future<dynamic> buildShowMaterialModalBottomSheet(
+      BuildContext context, Size size) {
+    return showMaterialModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) => Container(
+              // height: 680,
+              width: size.width * 0.87,
+              constraints: const BoxConstraints(maxWidth: 400),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(0, 0),
+                        color: Colors.blueGrey.withOpacity(0.15),
+                        spreadRadius: 5,
+                        blurRadius: 10)
+                  ],
+                  borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(5))),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.q2Question.value.toString(),
+                        style: TextStyle(
+                            color: Colors.grey[700],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                          children: List.generate(
+                              controller.qn2Options.length,
+                              (i) => OptionBtn(
+                                  onTap: () {
+                                    Get.back();
+                                    controller.setuserAnswer(question, option);
+                                    if (currentIndex! < questions_list.length) {
+                                      controller.nextQuestion();
+                                    } else {
+                                      null;
+                                    }
+                                  },
+                                  currentIndex: controller.questionCount + 1,
+                                  question:
+                                      controller.q1Question.value.toString(),
+                                  option: controller.qn2Options[i])))
                     ],
-                    borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(15),
-                        topLeft: Radius.circular(5))),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          controller.q2Question.value.toString(),
-                          style: TextStyle(
-                              color: Colors.grey[700],
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Column(
-                            // children: [OptionBtn(size: size, option: 'kd')],
-                            children: List.generate(
-                                controller.qn2Options.length,
-                                (i) => OptionBtn(
-                                    onTap: () {
-                                      Get.back();
-                                      controller.setuserAnswer(
-                                          question, option);
-                                      if (currentIndex! <
-                                          questions_list.length) {
-                                        controller.nextQuestion();
-                                      } else {
-                                        null;
-                                      }
-                                    },
-                                    currentIndex: controller.questionCount + 1,
-                                    question:
-                                        controller.q1Question.value.toString(),
-                                    option: controller.qn2Options[i])))
-                      ],
-                    ),
                   ),
                 ),
-              ));
-    }
+              ),
+            ));
   }
+
+  // Future<dynamic>? checkQuestionTwoTrigger(int index, context) {
+  //   print(index);
+  //   if (questions_list[index]["q1_trigger"] ==
+  //       controller.selected_Q1_Option.value) {
+  //     return showMaterialModalBottomSheet(
+  //         context: context,
+  //         backgroundColor: Colors.transparent,
+  //         builder: (BuildContext context) => Container(
+  //               // height: 680,
+  //               width: size(context).width * 0.87,
+  //               constraints: const BoxConstraints(maxWidth: 400),
+  //               decoration: BoxDecoration(
+  //                   color: Colors.white,
+  //                   boxShadow: [
+  //                     BoxShadow(
+  //                         offset: const Offset(0, 0),
+  //                         color: Colors.blueGrey.withOpacity(0.15),
+  //                         spreadRadius: 5,
+  //                         blurRadius: 10)
+  //                   ],
+  //                   borderRadius: const BorderRadius.only(
+  //                       topRight: Radius.circular(15),
+  //                       topLeft: Radius.circular(5))),
+  //               child: Padding(
+  //                 padding:
+  //                     const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+  //                 child: SingleChildScrollView(
+  //                   child: Column(
+  //                     // crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(
+  //                         controller.q2Question.value.toString(),
+  //                         style: TextStyle(
+  //                             color: Colors.grey[700],
+  //                             fontSize: 20,
+  //                             fontWeight: FontWeight.w700),
+  //                       ),
+  //                       const SizedBox(
+  //                         height: 20,
+  //                       ),
+  //                       Column(
+  //                           children: List.generate(
+  //                               controller.qn2Options.length,
+  //                               (i) => OptionBtn(
+  //                                   onTap: () {
+  //                                     Get.back();
+  //                                     controller.setuserAnswer(
+  //                                         question, option);
+  //                                     if (currentIndex! <
+  //                                         questions_list.length) {
+  //                                       controller.nextQuestion();
+  //                                     } else {
+  //                                       null;
+  //                                     }
+  //                                   },
+  //                                   currentIndex: controller.questionCount + 1,
+  //                                   question:
+  //                                       controller.q1Question.value.toString(),
+  //                                   option: controller.qn2Options[i])))
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ));
+  //   } else {
+  //     return null;
+  //   }
+  // }
 }
