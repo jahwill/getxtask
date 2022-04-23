@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-typedef Ontapcallback = void Function();
+typedef OntapCallBack = void Function();
 
-class EvCustomBtn extends StatelessWidget {
-  const EvCustomBtn(
+class CustomButton extends StatelessWidget {
+  const CustomButton(
       {Key? key,
       this.ontap,
       this.title = 'Ok',
@@ -13,7 +13,7 @@ class EvCustomBtn extends StatelessWidget {
       this.btnHeight = 35,
       this.loading = false})
       : super(key: key);
-  final Ontapcallback? ontap;
+  final OntapCallBack? ontap;
   final String title;
   final Color borderColor;
   final Color? bgColor;

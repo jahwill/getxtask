@@ -23,11 +23,7 @@ class QnModel {
         q2_options = json['q2_options'];
 }
 
-//List list_Model_Questions=[
-//
-//
-// ];
-List<Map<String, dynamic>> quest = [
+List<Map<String, dynamic>> questions_list = [
   {
     "q1": "What is your Gender?",
     "q1_options": ["Male", "Female", "Binary"],

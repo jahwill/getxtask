@@ -75,9 +75,10 @@ class QuestContainer extends GetView<QuestController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(
-                      quest.length,
+                      questions_list.length,
                       (index) => Container(
-                            width: (size.width * 0.6 / quest.length) - 5,
+                            width:
+                                (size.width * 0.6 / questions_list.length) - 5,
                             decoration: BoxDecoration(
                               color: controller.questionCount + 1 > index
                                   ? Colors.yellow
@@ -94,7 +95,7 @@ class QuestContainer extends GetView<QuestController> {
             ),
             Obx(
               () => Text(
-                'Question ${controller.questionCount + 1}/${quest.length}',
+                'Question ${controller.questionCount + 1}/${questions_list.length}',
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 30,
@@ -208,7 +209,8 @@ class OptionBtn extends GetView<QuestController> {
 
   checkQuestionTwoTrigger(int index, context) {
     print(index);
-    if (quest[index]["q1_trigger"] == controller.selected_Q1_Option.value) {
+    if (questions_list[index]["q1_trigger"] ==
+        controller.selected_Q1_Option.value) {
       showMaterialModalBottomSheet(
           context: context,
           backgroundColor: Colors.transparent,
@@ -254,7 +256,8 @@ class OptionBtn extends GetView<QuestController> {
                                       Get.back();
                                       controller.setuserAnswer(
                                           question, option);
-                                      if (currentIndex! < quest.length) {
+                                      if (currentIndex! <
+                                          questions_list.length) {
                                         controller.nextQuestion();
                                       } else {
                                         null;

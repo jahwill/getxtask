@@ -2,19 +2,20 @@ import 'package:get/get.dart';
 import 'package:getxtask/resource/test.dart';
 
 class QuestController extends GetxController {
-  var _q1Question = quest[0]['q1'].toString().obs;
+  var _q1Question = questions_list[0]['q1'].toString().obs;
   var _q2Question = ''.obs;
 
   var selected_Q1_Option = ''.obs;
   var selected_Q2_Option = ''.obs;
 
-  final RxList _q2_options = quest[0]['q2_options'] == null
+  final RxList _q2_options = questions_list[0]['q2_options'] == null
       ? [].obs
-      : List.generate(quest[0]['q2_options'].length,
-          (index) => quest[0]['q1_options'][index]).obs;
+      : List.generate(questions_list[0]['q2_options'].length,
+          (index) => questions_list[0]['q1_options'][index]).obs;
 
-  final RxList _Q1_Options = List.generate(quest[0]['q1_options'].length,
-      (index) => quest[0]['q1_options'][index]).obs;
+  final RxList _Q1_Options = List.generate(
+      questions_list[0]['q1_options'].length,
+      (index) => questions_list[0]['q1_options'][index]).obs;
   // var _new_question
 
   var _currentIndex = RxInt(0);
@@ -23,15 +24,15 @@ class QuestController extends GetxController {
 
   // setter
   set setquestIndex(int index) {
-    _q1Question.value = quest[index]['q1'];
-    _q2Question.value = quest[index]['q2'] ?? '';
+    _q1Question.value = questions_list[index]['q1'];
+    _q2Question.value = questions_list[index]['q2'] ?? '';
   }
 
   set setOptionIndex(int index) {
-    _Q1_Options.assignAll(quest[index]['q1_options']);
-    quest[index]['q2_options'] == null
+    _Q1_Options.assignAll(questions_list[index]['q1_options']);
+    questions_list[index]['q2_options'] == null
         ? _q2_options.assignAll([])
-        : _q2_options.assignAll(quest[index]['q2_options']);
+        : _q2_options.assignAll(questions_list[index]['q2_options']);
   }
 
   var _userAnswer = {}.obs;
@@ -41,7 +42,7 @@ class QuestController extends GetxController {
   }
 
   previousQuestion() {
-    if (count.value > 0 && count.value <= quest.length) {
+    if (count.value > 0 && count.value <= questions_list.length) {
       count.value--;
       setquestIndex = count.value;
       setOptionIndex = count.value;
@@ -51,8 +52,8 @@ class QuestController extends GetxController {
   }
 
   nextQuestion() {
-    if (count.value >= 0 && count.value < quest.length) {
-      if (count.value == quest.length - 1) {
+    if (count.value >= 0 && count.value < questions_list.length) {
+      if (count.value == questions_list.length - 1) {
         null;
       } else {
         count.value++;
